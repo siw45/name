@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>온기잇다 - 어르신 난방·건강 복지 케어</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Font & FontAwesome Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { 
+            font-family: 'Noto Sans KR', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+        /* Custom accessibility outline focus */
+        button:focus, input:focus {
+            outline: 3px solid #ea580c;
+            outline-offset: 2px;
+        }
+    </style>
+</head>
+<body class="bg-amber-50/60 text-slate-900 min-h-screen flex flex-col antialiased">
+
+    <!-- Top Accessibility Bar & Header -->
+    <header class="bg-gradient-to-r from-orange-600 to-amber-600 text-white shadow-md sticky top-0 z-50">
+        <div class="max-w-3xl mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <div class="bg-white/20 p-2.5 rounded-2xl flex items-center justify-center">
+                    <i class="fa-solid fa-sun text-yellow-300 text-2xl sm:text-3xl"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl sm:text-2xl font-black tracking-tight flex items-center gap-1.5">
+                        온기잇다
+                    </h1>
+                    <p class="text-xs text-orange-100 font-medium">SDG 1 모둠3 | 어르신 난방·건강 복지</p>
+                </div>
+            </div>
+            
+            <!-- Easy Font Resizer -->
+            <button onclick="toggleFontSize()" aria-label="글자 크기 변경" class="bg-orange-800/80 hover:bg-orange-900 text-white px-3.5 py-2 rounded-2xl text-xs sm:text-sm font-bold transition flex items-center gap-1.5 shadow-sm border border-orange-400/30">
+                <i class="fa-solid fa-magnifying-glass-plus text-sm"></i>
+                <span id="fontBtnText">글자 크게</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Navigation Bar (Large Touch Targets) -->
+    <nav class="bg-white border-b-2 border-orange-100 shadow-sm sticky top-[61px] sm:top-[69px] z-40">
+        <div class="max-w-3xl mx-auto flex justify-around p-1.5">
+            <button onclick="switchTab('welfare')" id="btn-welfare" class="py-3 px-2 font-black text-base sm:text-lg border-b-4 border-orange-600 text-orange-600 transition flex-1 text-center rounded-t-xl flex flex-col sm:flex-row items-center justify-center gap-1">
+                <i class="fa-solid fa-hand-holding-heart"></i>
+                <span>맞춤 혜택</span>
+            </button>
+            <button onclick="switchTab('safety')" id="btn-safety" class="py-3 px-2 font-bold text-base sm:text-lg border-b-4 border-transparent text-slate-500 hover:text-slate-800 transition flex-1 text-center rounded-t-xl flex flex-col sm:flex-row items-center justify-center gap-1">
+                <i class="fa-solid fa-heart-circle-check"></i>
+                <span>오늘 안부</span>
+            </button>
+            <button onclick="switchTab('shelter')" id="btn-shelter" class="py-3 px-2 font-bold text-base sm:text-lg border-b-4 border-transparent text-slate-500 hover:text-slate-800 transition flex-1 text-center rounded-t-xl flex flex-col sm:flex-row items-center justify-center gap-1">
+                <i class="fa-solid fa-house-chimney-window"></i>
+                <span>한파 쉼터</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Content Container -->
+    <main class="flex-grow max-w-3xl w-full mx-auto p-4 sm:p-6">
+
+        <!-- ================= TAB 1: 복지 혜택 검색 ================= -->
+        <section id="tab-welfare" class="space-y-5">
+            
+            <!-- Hero Banner -->
+            <div class="bg-gradient-to-br from-orange-500 to-amber-500 text-white rounded-3xl p-5 sm:p-6 shadow-md border border-orange-400/20">
+                <div class="flex items-start justify-between">
+                    <div>
+                        <span class="inline-block bg-white/20 text-white text-xs px-3 py-1 rounded-full font-bold mb-2">복지 사각지대 해소</span>
+                        <h2 class="text-2xl sm:text-3xl font-black leading-tight mb-2">
+                            누릴 수 있는 지원,<br>놓치지 마세요!
+                        </h2>
+                        <p class="text-orange-100 text-sm sm:text-base font-medium">
+                            신청 자격과 방법을 아주 쉽고 크게 정리해 드립니다.
+                        </p>
+                    </div>
+                    <div class="hidden sm:block text-5xl opacity-80">
+                        <i class="fa-solid fa-fire-flame-curved"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Big Category Filter Buttons -->
+            <div class="bg-white p-4 sm:p-5 rounded-3xl border border-orange-100 shadow-sm space-y-3">
+                <h3 class="text-base sm:text-lg font-black text-slate-800 flex items-center gap-2">
+                    <i class="fa-solid fa-filter text-orange-600"></i> 어떤 지원을 원하시나요?
+                </h3>
+                <div class="grid grid-cols-3 gap-2 sm:gap-3">
+                    <button onclick="filterWelfare('all')" class="welfare-filter-btn py-3 px-2 bg-orange-600 text-white font-black rounded-2xl shadow hover:bg-orange-700 transition text-center text-sm sm:text-base flex flex-col items-center justify-center gap-1" data-cat="all">
+                        <i class="fa-solid fa-border-all"></i>
+                        <span>전체보기</span>
+                    </button>
+                    <button onclick="filterWelfare('heating')" class="welfare-filter-btn py-3 px-2 bg-slate-100 text-slate-700 font-bold rounded-2xl hover:bg-orange-100 transition text-center text-sm sm:text-base flex flex-col items-center justify-center gap-1" data-cat="heating">
+                        <i class="fa-solid fa-temperature-arrow-up text-orange-600"></i>
+                        <span>난방·에너지</span>
+                    </button>
+                    <button onclick="filterWelfare('health')" class="welfare-filter-btn py-3 px-2 bg-slate-100 text-slate-700 font-bold rounded-2xl hover:bg-orange-100 transition text-center text-sm sm:text-base flex flex-col items-center justify-center gap-1" data-cat="health">
+                        <i class="fa-solid fa-capsules text-red-500"></i>
+                        <span>건강·약제비</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Welfare Cards List -->
+            <div id="welfareList" class="space-y-4">
+                <!-- Dynamic Content Rendered via JS -->
+            </div>
+        </section>
+
+
+        <!-- ================= TAB 2: 오늘 안부 확인 ================= -->
+        <section id="tab-safety" class="space-y-5 hidden">
+            
+            <div class="bg-gradient-to-br from-amber-500 to-orange-500 text-white rounded-3xl p-5 sm:p-6 shadow-md">
+                <h2 class="text-2xl sm:text-3xl font-black mb-1 flex items-center gap-2">
+                    <i class="fa-solid fa-heart-pulse"></i> 오늘 안부 등록
+                </h2>
+                <p class="text-amber-100 font-medium text-sm sm:text-base">
+                    단 한 번의 터치로 복지사님과 전담 돌봄 이웃에게 안심 신호를 보냅니다.
+                </p>
+            </div>
+
+            <div class="bg-white p-5 sm:p-6 rounded-3xl border border-orange-100 shadow-sm space-y-5">
+                
+                <!-- Input Name -->
+                <div>
+                    <label for="userName" class="block font-black text-slate-800 text-base sm:text-lg mb-2 flex items-center gap-2">
+                        <i class="fa-solid fa-user text-orange-600"></i> 성함 또는 별명을 입력해주세요
+                    </label>
+                    <input type="text" id="userName" placeholder="예: 김순자 어르신" class="w-full p-4 border-2 border-slate-200 rounded-2xl text-lg font-bold focus:border-orange-500 focus:bg-orange-50/30 focus:outline-none transition">
+                </div>
+
+                <!-- Status Select Buttons (Huge Touch Target) -->
+                <div>
+                    <label class="block font-black text-slate-800 text-base sm:text-lg mb-2 flex items-center gap-2">
+                        <i class="fa-solid fa-face-smile text-orange-600"></i> 오늘 상태를 눌러주세요
+                    </label>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                        <button onclick="selectStatus('따뜻하고 건강해요 😊', this)" class="status-btn border-2 border-slate-200 p-4 rounded-2xl font-bold text-center hover:border-orange-500 transition flex sm:flex-col items-center justify-center gap-2 bg-slate-50/50">
+                            <span class="text-3xl">😊</span>
+                            <span class="text-lg font-black text-slate-800">좋아요</span>
+                        </button>
+                        <button onclick="selectStatus('집이 조금 춥습니다 ❄️', this)" class="status-btn border-2 border-slate-200 p-4 rounded-2xl font-bold text-center hover:border-orange-500 transition flex sm:flex-col items-center justify-center gap-2 bg-slate-50/50">
+                            <span class="text-3xl">❄️</span>
+                            <span class="text-lg font-black text-slate-800">추워요</span>
+                        </button>
+                        <button onclick="selectStatus('도움이 필요합니다 🚑', this)" class="status-btn border-2 border-slate-200 p-4 rounded-2xl font-bold text-center hover:border-orange-500 transition flex sm:flex-col items-center justify-center gap-2 bg-slate-50/50">
+                            <span class="text-3xl">🚑</span>
+                            <span class="text-lg font-black text-red-600">도움 필요</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <button onclick="submitCheckin()" class="w-full bg-orange-600 hover:bg-orange-700 active:bg-orange-800 text-white font-black text-xl py-4 rounded-2xl transition shadow-lg flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-paper-plane"></i>
+                    <span>안부 등록하기</span>
+                </button>
+            </div>
+
+            <!-- Recent Check-ins Timeline -->
+            <div class="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm space-y-3">
+                <h3 class="font-black text-slate-800 text-lg flex items-center gap-2 border-b border-slate-100 pb-2">
+                    <i class="fa-solid fa-users text-amber-600"></i> 실시간 동네 어르신 안부 상황
+                </h3>
+                <div id="checkinList" class="space-y-2.5">
+                    <!-- Dynamic List -->
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ================= TAB 3: 한파 쉼터 안내 ================= -->
+        <section id="tab-shelter" class="space-y-5 hidden">
+            
+            <div class="bg-gradient-to-br from-blue-600 to-indigo-600 text-white rounded-3xl p-5 sm:p-6 shadow-md">
+                <h2 class="text-2xl sm:text-3xl font-black mb-1 flex items-center gap-2">
+                    <i class="fa-solid fa-person-shelter"></i> 우리 동네 따뜻한 쉼터
+                </h2>
+                <p class="text-blue-100 font-medium text-sm sm:text-base">
+                    추위나 한파 시 언제든 방문하여 쉬어갈 수 있는 가까운 장소입니다.
+                </p>
+            </div>
+
+            <!-- Shelter Search & Cards Container -->
+            <div id="shelterList" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <!-- Dynamic Content Rendered via JS -->
+            </div>
+        </section>
+
+    </main>
+
+
+    <!-- Modal Dialog -->
+    <div id="customModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
+        <div class="bg-white rounded-3xl p-6 max-w-sm w-full text-center space-y-4 shadow-2xl border-4 border-orange-400">
+            <div id="modalIcon" class="text-5xl">❤️</div>
+            <h3 id="modalTitle" class="font-black text-2xl text-slate-800">알림</h3>
+            <p id="modalDesc" class="text-base text-slate-600 font-medium leading-relaxed">내용</p>
+            <button onclick="closeModal()" class="w-full bg-orange-600 hover:bg-orange-700 text-white py-3.5 rounded-2xl text-lg font-black transition shadow-md">
+                확인했습니다
+            </button>
+        </div>
+    </div>
+
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-slate-200 text-center py-6 px-4 text-slate-500 mt-10">
+        <div class="max-w-3xl mx-auto space-y-1">
+            <p class="font-black text-slate-700 text-base">SDG 1번: 빈곤층 감소 및 사회안전망 강화 프로젝트</p>
+            <p class="text-xs text-slate-400 font-medium">제작: 고등학생 탐구 모둠3 (온기잇다 웹앱)</p>
+        </div>
+    </footer>
+
+
+    <!-- JavaScript Application Logic -->
+    <script>
+        // Data: Welfare Information
+        const welfareData = [
+            {
+                id: 1,
+                category: "heating",
+                title: "겨울철 에너지 바우처 (난방비 지원)",
+                badge: "🔥 난방 지원",
+                desc: "전기, 도시가스, 연탄, 난방유를 구입할 수 있는 이용권을 실질적으로 지원합니다.",
+                target: "생계·의료·주거 급여 수급 가구 중 만 65세 이상 어르신 포함 가구",
+                how: "주민센터 방문 또는 복지로(129) 전화 신청",
+                phone: "129"
+            },
+            {
+                id: 2,
+                category: "health",
+                title: "어르신 만성질환 약제비 및 진료비 지원",
+                badge: "💊 건강 지원",
+                desc: "고혈압, 당뇨 등 정기 투약이 필요한 어르신의 약제비와 진료 부담금을 보조합니다.",
+                target: "기초생활수급자 및 차상위계층 만 65세 이상 어르신",
+                how: "동네 보건소 방문 후 처방전 제출",
+                phone: "02-123-4567"
+            },
+            {
+                id: 3,
+                category: "heating",
+                title: "노후주택 단열 & 창호 무상 보수",
+                badge: "🏠 주거 환경",
+                desc: "겨울철 외풍을 막아주는 문풍지, 창 단열재 설치 및 보일러 점검을 지원합니다.",
+                target: "단독·다세대 노후 주택에 거주하는 독거 어르신 가구",
+                how: "동 주민센터 복지팀 현장 접수",
+                phone: "02-120-0000"
+            },
+            {
+                id: 4,
+                category: "health",
+                title: "찾아가는 전담 간호사 방문건강 관리",
+                badge: "🩺 방문 케어",
+                desc: "간호사가 직접 방문하여 혈압·혈당 측정 및 겨울철 건강 상태를 정기 점검합니다.",
+                target: "만성질환을 가진 홀몸 어르신 및 취약계층",
+                how: "지역 보건소 방문건강관리팀 등록",
+                phone: "02-987-6543"
+            }
+        ];
+
+        // Data: Shelter Information
+        const shelterData = [
+            { 
+                name: "햇살 경로당 한파쉼터", 
+                address: "동네 중앙로 15길 4", 
+                time: "오전 09:00 ~ 오후 18:00", 
+                note: "난방 시설 완비, 따뜻한 음료 제공", 
+                phone: "02-123-4567" 
+            },
+            { 
+                name: "행복 복지관 온기 라운지", 
+                address: "동네 평화로 88", 
+                time: "상시 개방 (주말 포함)", 
+                note: "방한 용품 및 핫팩 무상 나눔", 
+                phone: "02-987-6543" 
+            },
+            { 
+                name: "주민센터 1층 따뜻 희망쉼터", 
+                address: "동네 희망길 10", 
+                time: "오전 09:00 ~ 오후 18:00", 
+                note: "복지 상담 및 건강 체크 서비스 병행", 
+                phone: "02-555-0119" 
+            }
+        ];
+
+        // Data: Checkin Logs
+        let checkinData = [
+            { name: "김*순 어르신", status: "따뜻하고 건강해요 😊", time: "5분 전", type: "good" },
+            { name: "박*자 어르신", status: "집이 조금 춥습니다 ❄️", time: "18분 전", type: "cold" },
+            { name: "이*철 어르신", status: "따뜻하고 건강해요 😊", time: "1시간 전", type: "good" }
+        ];
+
+        let selectedStatusText = "";
+
+        // Font Size Accessibility Toggle
+        let isLargeFont = false;
+        function toggleFontSize() {
+            isLargeFont = !isLargeFont;
+            const btnText = document.getElementById('fontBtnText');
+            if(isLargeFont) {
+                document.documentElement.style.fontSize = "20px";
+                btnText.innerText = "글자 보통";
+            } else {
+                document.documentElement.style.fontSize = "16px";
+                btnText.innerText = "글자 크게";
+            }
+        }
+
+        // Tab Switcher
+        function switchTab(tabName) {
+            document.getElementById('tab-welfare').classList.add('hidden');
+            document.getElementById('tab-safety').classList.add('hidden');
+            document.getElementById('tab-shelter').classList.add('hidden');
+
+            const inactiveStyle = "py-3 px-2 font-bold text-base sm:text-lg border-b-4 border-transparent text-slate-500 hover:text-slate-800 transition flex-1 text-center rounded-t-xl flex flex-col sm:flex-row items-center justify-center gap-1";
+            
+            document.getElementById('btn-welfare').className = inactiveStyle;
+            document.getElementById('btn-safety').className = inactiveStyle;
+            document.getElementById('btn-shelter').className = inactiveStyle;
+
+            document.getElementById(`tab-${tabName}`).classList.remove('hidden');
+            document.getElementById(`btn-${tabName}`).className = "py-3 px-2 font-black text-base sm:text-lg border-b-4 border-orange-600 text-orange-600 transition flex-1 text-center rounded-t-xl flex flex-col sm:flex-row items-center justify-center gap-1";
+        }
+
+        // Render Welfare Cards
+        function renderWelfare(items) {
+            const container = document.getElementById('welfareList');
+            container.innerHTML = "";
+            items.forEach(item => {
+                container.innerHTML += `
+                    <div class="bg-white p-5 sm:p-6 rounded-3xl border-2 border-slate-200 shadow-sm space-y-3 hover:border-orange-400 transition">
+                        <div class="flex justify-between items-center">
+                            <span class="bg-orange-100 text-orange-900 px-3.5 py-1 rounded-full text-sm font-black">${item.badge}</span>
+                            <span class="text-xs text-slate-400 font-bold">정부/지자체 지원</span>
+                        </div>
+                        <h3 class="font-black text-xl sm:text-2xl text-slate-800">${item.title}</h3>
+                        <p class="text-slate-600 font-medium text-base sm:text-lg">${item.desc}</p>
+                        <div class="bg-orange-50/70 p-4 rounded-2xl border border-orange-200 space-y-1.5">
+                            <p class="text-orange-950 font-bold text-sm sm:text-base">
+                                <i class="fa-solid fa-bullseye text-orange-600"></i> <span class="font-black">지원 대상:</span> ${item.target}
+                            </p>
+                            <p class="text-slate-700 font-bold text-sm sm:text-base">
+                                <i class="fa-solid fa-phone text-orange-600"></i> <span class="font-black">신청 방법:</span> ${item.how}
+                            </p>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        // Filter Welfare Category
+        function filterWelfare(cat) {
+            const btns = document.querySelectorAll('.welfare-filter-btn');
+            btns.forEach(btn => {
+                if(btn.dataset.cat === cat) {
+                    btn.className = "welfare-filter-btn py-3 px-2 bg-orange-600 text-white font-black rounded-2xl shadow hover:bg-orange-700 transition text-center text-sm sm:text-base flex flex-col items-center justify-center gap-1";
+                } else {
+                    btn.className = "welfare-filter-btn py-3 px-2 bg-slate-100 text-slate-700 font-bold rounded-2xl hover:bg-orange-100 transition text-center text-sm sm:text-base flex flex-col items-center justify-center gap-1";
+                }
+            });
+
+            if(cat === 'all') {
+                renderWelfare(welfareData);
+            } else {
+                renderWelfare(welfareData.filter(i => i.category === cat));
+            }
+        }
+
+        // Status Selection
+        function selectStatus(statusText, element) {
+            selectedStatusText = statusText;
+            const btns = document.querySelectorAll('.status-btn');
+            btns.forEach(btn => {
+                btn.classList.remove('border-orange-500', 'bg-orange-100', 'ring-2', 'ring-orange-400');
+            });
+            element.classList.add('border-orange-500', 'bg-orange-100', 'ring-2', 'ring-orange-400');
+        }
+
+        // Submit Checkin
+        function submitCheckin() {
+            const nameInput = document.getElementById('userName');
+            const name = nameInput.value.trim();
+
+            if(!name) {
+                showModal("성함을 입력해주세요", "어르신 또는 보호자분의 이름을 간단히 적어주세요.", "⚠️");
+                return;
+            }
+            if(!selectedStatusText) {
+                showModal("상태를 선택해주세요", "오늘의 상태 아이콘 버튼 중 하나를 눌러주세요.", "⚠️");
+                return;
+            }
+
+            const maskedName = name.length > 2 ? name[0] + "*" + name[name.length - 1] : name[0] + "*";
+
+            checkinData.unshift({
+                name: maskedName + " 어르신",
+                status: selectedStatusText,
+                time: "방금 전"
+            });
+
+            renderCheckins();
+            showModal("안부가 전달되었습니다!", "오늘의 상태가 사회복지사 및 전담 돌봄 이웃에게 안심 신호로 공유되었습니다.", "❤️");
+            
+            // Reset
+            nameInput.value = "";
+            selectedStatusText = "";
+            document.querySelectorAll('.status-btn').forEach(btn => {
+                btn.classList.remove('border-orange-500', 'bg-orange-100', 'ring-2', 'ring-orange-400');
+            });
+        }
+
+        // Render Checkin List
+        function renderCheckins() {
+            const container = document.getElementById('checkinList');
+            container.innerHTML = "";
+            checkinData.forEach(c => {
+                container.innerHTML += `
+                    <div class="bg-slate-50 p-3.5 rounded-2xl border border-slate-200 flex justify-between items-center">
+                        <div class="flex items-center gap-2.5">
+                            <i class="fa-solid fa-circle-user text-2xl text-orange-400"></i>
+                            <div>
+                                <p class="font-black text-slate-800 text-base">${c.name}</p>
+                                <p class="text-sm font-bold text-orange-900">${c.status}</p>
+                            </div>
+                        </div>
+                        <span class="text-xs text-slate-400 font-bold bg-white px-2 py-1 rounded-lg border border-slate-100">${c.time}</span>
+                    </div>
+                `;
+            });
+        }
+
+        // Render Shelter List
+        function renderShelters() {
+            const container = document.getElementById('shelterList');
+            container.innerHTML = "";
+            shelterData.forEach(s => {
+                container.innerHTML += `
+                    <div class="bg-white p-5 rounded-3xl border-2 border-slate-200 shadow-sm space-y-2.5 flex flex-col justify-between">
+                        <div>
+                            <span class="bg-blue-100 text-blue-900 text-xs font-black px-2.5 py-1 rounded-full">상시 개방</span>
+                            <h3 class="font-black text-xl text-slate-800 mt-2 flex items-center gap-1.5">
+                                <i class="fa-solid fa-building-user text-blue-600"></i> ${s.name}
+                            </h3>
+                            <p class="text-slate-600 font-bold text-sm sm:text-base mt-1">📍 ${s.address}</p>
+                            <p class="text-xs sm:text-sm bg-blue-50 text-blue-900 p-2.5 rounded-xl font-bold mt-2">
+                                ℹ️ ${s.note}
+                            </p>
+                        </div>
+                        <div class="pt-2 border-t border-slate-100 flex justify-between items-center text-xs text-slate-500 font-bold">
+                            <span>🕒 ${s.time}</span>
+                            <a href="tel:${s.phone}" class="bg-blue-600 text-white px-3 py-1.5 rounded-xl hover:bg-blue-700 transition flex items-center gap-1">
+                                <i class="fa-solid fa-phone"></i> 전화문의
+                            </a>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        // Modal Controls
+        function showModal(title, desc, icon) {
+            document.getElementById('modalTitle').innerText = title;
+            document.getElementById('modalDesc').innerText = desc;
+            document.getElementById('modalIcon').innerText = icon;
+            document.getElementById('customModal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('customModal').classList.add('hidden');
+        }
+
+        // Initialize App
+        window.onload = function() {
+            renderWelfare(welfareData);
+            renderCheckins();
+            renderShelters();
+        };
+    </script>
+</body>
+</html>
